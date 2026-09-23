@@ -4,6 +4,7 @@ const express = require('express')
 const cors = require('cors')
 const connectDB = require('./config/db')
 const authRoutes = require('./routes/auth')
+const postRoutes = require('./routes/posts')
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -17,8 +18,9 @@ app.use(cors({
 app.use(express.json())
 
 app.use('/api/auth', authRoutes)
+app.use('/api/posts', postRoutes)
 
-app.get('/api/test', (req, res) => {
+app.get('/api/health', (req, res) => {
   const dbStatus = require('mongoose').connection.readyState === 1
     ? 'connected'
     : 'disconnected'
