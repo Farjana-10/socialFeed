@@ -24,10 +24,11 @@ export default function Signup() {
     setError('')
 
     try {
-      await axios.post(
+        await axios.post(
         'http://localhost:5000/api/auth/signup',
         form
       )
+      alert('Account created! Please check your email to verify.')
       navigate('/login')
     } catch (err) {
       setError(err.response?.data?.message || 'Signup failed')

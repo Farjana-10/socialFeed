@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const User = require('../models/User')
+const { sendVerificationEmail } = require('../config/mailer')
 
 const generateToken = (userId) => {
   return jwt.sign(
@@ -30,7 +31,10 @@ const signup = async (req, res) => {
     }
 
     const existingUser = await User.findOne({
-      $or: [{ username: username.toLowerCase() }, { email: email.toLowerCase() }]
+      $or: [
+        { username: username.toLowerCase() },
+        { email: email.toLowerCase() }
+      ]
     })
 
     if (existingUser) {
@@ -52,9 +56,15 @@ const signup = async (req, res) => {
       verificationExpires: new Date(Date.now() + 60 * 60 * 1000)
     })
 
+    try {
+      await sendVerificationEmail(user.email, verificationToken)
+    } catch (mailError) {
+      console.error('Email send error:', mailError.message)
+    }
+
     res.status(201).json({
       success: true,
-      message: 'Account created successfully',
+      message: 'Account created. Please check your email to verify.',
       user: {
         id: user._id,
         fullName: user.fullName,
@@ -98,6 +108,13 @@ const login = async (req, res) => {
       })
     }
 
+    if (!user.isVerified) {
+      return res.status(403).json({
+        success: false,
+        message: 'Please verify your email first'
+      })
+    }
+
     const isMatch = await bcrypt.compare(password, user.passwordHash)
 
     if (!isMatch) {
@@ -120,6 +137,41 @@ const login = async (req, res) => {
         email: user.email,
         isVerified: user.isVerified
       }
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message
+    })
+  }
+}
+
+const verifyEmail = async (req, res) => {
+  try {
+    const { token } = req.params
+
+    const user = await User.findOne({
+      verificationToken: token,
+      verificationExpires: { $gt: new Date() }
+    })
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or expired verification link'
+      })
+    }
+
+    user.isVerified = true
+    user.verificationToken = null
+    user.verificationExpires = null
+    await user.save()
+
+    res.json({
+      success: true,
+      message: 'Email verified successfully. You can now login.'
     })
 
   } catch (error) {
@@ -159,5 +211,6 @@ const getMe = async (req, res) => {
 module.exports = {
   signup,
   login,
+  verifyEmail,
   getMe
 }
