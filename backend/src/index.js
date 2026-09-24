@@ -5,6 +5,8 @@ const cors = require('cors')
 const connectDB = require('./config/db')
 const authRoutes = require('./routes/auth')
 const postRoutes = require('./routes/posts')
+const accountRoutes = require('./routes/accounts')
+const interestRoutes = require('./routes/interests')
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -19,6 +21,8 @@ app.use(express.json())
 
 app.use('/api/auth', authRoutes)
 app.use('/api/posts', postRoutes)
+app.use('/api/accounts', accountRoutes)
+app.use('/api/interests', interestRoutes)
 
 app.get('/api/health', (req, res) => {
   const dbStatus = require('mongoose').connection.readyState === 1

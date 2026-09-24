@@ -1,8 +1,3 @@
-const Post = require('../models/Post')
-const User = require('../models/User')
-const SocialAccount = require('../models/SocialAccount')
-const Interest = require('../models/Interest')
-
 const getPosts = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1
@@ -58,27 +53,3 @@ const getPosts = async (req, res) => {
     })
   }
 }
-
-const getPostById = async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id)
-
-    if (!post) {
-      return res.status(404).json({
-        success: false,
-        message: 'Post not found'
-      })
-    }
-
-    res.json({ success: true, post })
-
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Server error',
-      error: error.message
-    })
-  }
-}
-
-module.exports = { getPosts, getPostById }
