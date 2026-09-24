@@ -33,6 +33,11 @@ const postSchema = new mongoose.Schema({
     required: true,
     index: true
   },
+  tags: {
+    type: [String],
+    default: [],
+    index: true
+  },
   isPublic: {
     type: Boolean,
     default: true
