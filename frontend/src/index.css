@@ -2,8 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f5f7fb;
-  margin: 0;
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    color: #0f172a;
+    font-family: 'Plus Jakarta Sans', Inter, system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+    letter-spacing: -0.025em;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  input, textarea, select, button {
+    font-family: inherit;
+  }
+}
+
+@layer components {
+  .surface-card {
+    @apply rounded-2xl border border-gray-200 bg-white shadow-sm;
+  }
 }
