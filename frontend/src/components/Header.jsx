@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Search, Timer, Moon } from 'lucide-react'
+import Button from './ui/Button'
+
+const NAV_ITEMS = [
+  { label: 'Home', path: '/' },
+  { label: 'Feed', path: '/feed' },
+  { label: 'Profile', path: '/profile' },
+]
 
 export default function Header() {
   const navigate = useNavigate()
@@ -36,17 +43,10 @@ export default function Header() {
     navigate('/')
   }
 
-  const navItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Feed', path: '/feed' },
-    { label: 'Profile', path: '/profile' }
-  ]
-
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
       <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-3 px-6">
-
-        <Link to="/" className="flex items-center gap-2.5 shrink-0">
+        <Link to="/" className="flex shrink-0 items-center gap-2.5">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-600 text-white">
             <span className="font-serif text-sm font-bold">S</span>
           </span>
@@ -56,7 +56,7 @@ export default function Header() {
         </Link>
 
         <nav className="ml-4 hidden items-center gap-0.5 lg:flex">
-          {navItems.map(item => (
+          {NAV_ITEMS.map((item) => (
             <Link
               key={item.path}
               to={item.path}
@@ -72,7 +72,6 @@ export default function Header() {
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
-
           <form
             onSubmit={(e) => e.preventDefault()}
             className="relative hidden max-w-xs md:block"
@@ -102,22 +101,15 @@ export default function Header() {
               <span className="hidden text-sm text-gray-600 lg:inline">
                 {user.fullName || user.username}
               </span>
-              <button
-                onClick={handleLogout}
-                className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
-              >
+              <Button onClick={handleLogout} size="md">
                 Logout
-              </button>
+              </Button>
             </div>
           ) : (
-            <Link
-              to="/login"
-              className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
-            >
-              Login
+            <Link to="/login">
+              <Button size="md">Login</Button>
             </Link>
           )}
-
         </div>
       </div>
     </header>

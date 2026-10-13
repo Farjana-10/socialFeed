@@ -1,23 +1,22 @@
 import { Link } from 'react-router-dom'
+import Button from './ui/Button'
 
-export default function GuestBanner() {
+export default function GuestBanner({
+  message = "You're browsing as a guest — login to keep your feed and saved posts.",
+}) {
   return (
-    <div className="bg-teal-50 border border-teal-100 rounded-xl px-5 py-4 flex items-center gap-4 mb-5">
-      <p className="text-sm text-teal-800 flex-1">
-        You're browsing as a guest — login to keep your feed and saved posts.
-      </p>
-      <Link
-        to="/login"
-        className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-lg"
-      >
-        Create account
-      </Link>
-      <Link
-        to="/login"
-        className="px-4 py-2 border border-teal-200 text-teal-700 text-sm font-semibold rounded-lg"
-      >
-        Login
-      </Link>
+    <div className="mb-7 flex flex-col gap-3 rounded-xl border border-dashed border-teal-300 bg-teal-50/60 p-4 sm:flex-row sm:items-center sm:justify-between">
+      <p className="text-sm text-teal-900">{message}</p>
+      <div className="flex gap-2">
+        <Link to="/login">
+          <Button size="md">Create account</Button>
+        </Link>
+        <Link to="/login">
+          <Button variant="outline" size="md">
+            Login
+          </Button>
+        </Link>
+      </div>
     </div>
   )
 }
