@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../api/axios'
 
 export default function Signup() {
   const navigate = useNavigate()
@@ -24,10 +24,7 @@ export default function Signup() {
     setError('')
 
     try {
-        await axios.post(
-        'http://localhost:5000/api/auth/signup',
-        form
-      )
+      await api.post('/auth/signup', form)
       alert('Account created! Please check your email to verify.')
       navigate('/login')
     } catch (err) {
@@ -41,7 +38,7 @@ export default function Signup() {
     <div className="min-h-screen flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
 
-        <h1 className="text-2xl font-bold text-center text-indigo-600 mb-6">
+        <h1 className="font-serif text-2xl font-bold text-center text-teal-600 mb-6">
           Create Account
         </h1>
 
@@ -62,7 +59,7 @@ export default function Signup() {
               name="fullName"
               value={form.fullName}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-teal-500"
               placeholder="Enter full name"
               required
             />
@@ -77,7 +74,7 @@ export default function Signup() {
               name="username"
               value={form.username}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-teal-500"
               placeholder="Choose username"
               required
             />
@@ -92,7 +89,7 @@ export default function Signup() {
               name="email"
               value={form.email}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-teal-500"
               placeholder="Enter email"
               required
             />
@@ -107,7 +104,7 @@ export default function Signup() {
               name="password"
               value={form.password}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-teal-500"
               placeholder="Create password"
               required
             />
@@ -116,7 +113,7 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold py-2.5 rounded-xl transition"
+            className="w-full bg-teal-600 hover:bg-teal-700 disabled:opacity-50 text-white font-semibold py-2.5 rounded-xl transition"
           >
             {loading ? 'Creating account...' : 'Sign Up'}
           </button>
@@ -125,7 +122,7 @@ export default function Signup() {
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Already have an account?{' '}
-          <Link to="/login" className="text-indigo-600 font-semibold hover:underline">
+          <Link to="/login" className="text-teal-600 font-semibold hover:underline">
             Login
           </Link>
         </p>

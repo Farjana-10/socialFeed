@@ -16,7 +16,10 @@ const PORT = process.env.PORT || 5000
 connectDB()
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: [
+    'http://localhost:5173',
+    process.env.CLIENT_URL
+  ].filter(Boolean),
   credentials: true
 }))
 app.use(express.json())
@@ -27,7 +30,7 @@ app.use('/api/accounts', accountRoutes)
 app.use('/api/interests', interestRoutes)
 app.use('/api/aggregate', aggregateRoutes)
 
-app.get('/api/health', (req, res) => {
+app.get('/api/test', (req, res) => {
   const dbStatus = require('mongoose').connection.readyState === 1
     ? 'connected'
     : 'disconnected'
@@ -39,7 +42,7 @@ app.get('/api/health', (req, res) => {
   })
 })
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`)
   startScheduler()
 })

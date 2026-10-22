@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Clock, Bookmark, Heart, User, Activity, Search } from 'lucide-react'
-import axios from 'axios'
+import api from '../api/axios'
 import useAuth from '../hooks/useAuth'
 import Card from '../components/ui/Card'
 import Progress from '../components/ui/Progress'
@@ -27,10 +27,7 @@ export default function Profile() {
 
     const fetchInterests = async () => {
       try {
-        const res = await axios.get(
-          'http://localhost:5000/api/interests',
-          { headers: { Authorization: `Bearer ${token}` } }
-        )
+        const res = await api.get('/interests')
         setInterests(res.data.interests.filter((i) => i.selected).map((i) => i.name))
       } catch (err) {
         console.error(err.message)

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import api from '../api/axios'
 
 export default function useFeed({ page, kind, token }) {
   const [posts, setPosts] = useState([])
@@ -11,11 +11,7 @@ export default function useFeed({ page, kind, token }) {
     const fetchPosts = async () => {
       setLoading(true)
       try {
-        const headers = token ? { Authorization: `Bearer ${token}` } : {}
-        const res = await axios.get(
-          `http://localhost:5000/api/posts?page=${page}&kind=${kind}`,
-          { headers }
-        )
+        const res = await api.get(`/posts?page=${page}&kind=${kind}`)
         setPosts(res.data.posts)
         setTotalPages(res.data.totalPages)
         setCounts(res.data.counts)

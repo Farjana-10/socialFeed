@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../api/axios'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
@@ -29,23 +29,20 @@ export default function Login() {
 
     try {
       if (mode === 'login') {
-        const res = await axios.post(
-          'http://localhost:5000/api/auth/login',
-          { username: form.email, password: form.password }
-        )
+        const res = await api.post('/auth/login', {
+          username: form.email,
+          password: form.password
+        })
         localStorage.setItem('token', res.data.token)
         localStorage.setItem('user', JSON.stringify(res.data.user))
         navigate('/feed')
       } else {
-        await axios.post(
-          'http://localhost:5000/api/auth/signup',
-          {
-            fullName: form.fullName,
-            username: form.username,
-            email: form.email,
-            password: form.password
-          }
-        )
+        await api.post('/auth/signup', {
+          fullName: form.fullName,
+          username: form.username,
+          email: form.email,
+          password: form.password
+        })
         alert('Account created! Please check your email to verify.')
         setMode('login')
       }
@@ -150,7 +147,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full py-3"
+              className="w-full rounded-lg bg-teal-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? 'Please wait…' : mode === 'login' ? 'Login' : 'Create account'}
             </button>

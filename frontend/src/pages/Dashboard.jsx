@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import axios from 'axios'
+import api from '../api/axios'
 
 const PLATFORM_ICONS = {
   youtube: '▶',
@@ -42,12 +42,9 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token')
-        const headers = { Authorization: `Bearer ${token}` }
-
         const [accRes, intRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/accounts', { headers }),
-          axios.get('http://localhost:5000/api/interests', { headers })
+          api.get('/accounts'),
+          api.get('/interests')
         ])
 
         setAccounts(accRes.data.accounts)
@@ -67,12 +64,7 @@ export default function Dashboard() {
     if (!platformUsername) return
 
     try {
-      const token = localStorage.getItem('token')
-      await axios.post(
-        'http://localhost:5000/api/accounts/connect',
-        { platformId, platformUsername },
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
+      await api.post('/accounts/connect', { platformId, platformUsername })
       window.location.reload()
     } catch (err) {
       alert(err.response?.data?.message || 'Connect failed')
@@ -83,11 +75,7 @@ export default function Dashboard() {
     if (!confirm(`Disconnect ${PLATFORM_LABELS[platformId]}?`)) return
 
     try {
-      const token = localStorage.getItem('token')
-      await axios.delete(
-        `http://localhost:5000/api/accounts/${platformId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
+      await api.delete(`/accounts/${platformId}`)
       window.location.reload()
     } catch (err) {
       alert(err.response?.data?.message || 'Disconnect failed')
@@ -102,14 +90,8 @@ export default function Dashboard() {
 
   const saveInterests = async () => {
     try {
-      const token = localStorage.getItem('token')
       const selected = interests.filter(i => i.selected).map(i => i.name)
-
-      await axios.post(
-        'http://localhost:5000/api/interests',
-        { interests: selected },
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
+      await api.post('/interests', { interests: selected })
       alert('Interests saved')
     } catch (err) {
       alert(err.response?.data?.message || 'Save failed')

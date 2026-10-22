@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Layers, Clock, ShieldCheck, ArrowRight } from 'lucide-react'
-import axios from 'axios'
+import api from '../api/axios'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import InterestSelector from '../components/InterestSelector'
@@ -45,11 +45,7 @@ export default function Home() {
     const token = localStorage.getItem('token')
     if (token && interests.length > 0) {
       try {
-        await axios.post(
-          'http://localhost:5000/api/interests',
-          { interests },
-          { headers: { Authorization: `Bearer ${token}` } }
-        )
+        await api.post('/interests', { interests })
       } catch (err) {
         console.error(err.message)
       }
