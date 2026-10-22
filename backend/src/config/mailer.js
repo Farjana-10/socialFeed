@@ -1,11 +1,16 @@
 const nodemailer = require('nodemailer')
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
-  }
+  },
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000
 })
 
 const sendVerificationEmail = async (email, token) => {
@@ -17,10 +22,10 @@ const sendVerificationEmail = async (email, token) => {
     subject: 'Verify your SocialFeed account',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
-        <h2 style="color: #4f46e5;">Welcome to SocialFeed!</h2>
+        <h2 style="color: #0d9488;">Welcome to SocialFeed!</h2>
         <p>Thanks for signing up. Click the button below to verify your email address:</p>
         <a href="${verifyUrl}"
-           style="display: inline-block; padding: 12px 24px; background: #4f46e5; color: white; text-decoration: none; border-radius: 8px; margin: 16px 0;">
+           style="display: inline-block; padding: 12px 24px; background: #0d9488; color: white; text-decoration: none; border-radius: 8px; margin: 16px 0;">
           Verify Email
         </a>
         <p style="color: #666; font-size: 14px;">

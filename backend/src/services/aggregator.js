@@ -56,6 +56,7 @@ const aggregateAll = async () => {
   for (const subreddit of SOURCES.reddit) {
     const posts = await api.fetchReddit(subreddit, 10)
     allPosts.push(...posts)
+    await new Promise(resolve => setTimeout(resolve, 2000))
   }
 
   for (const tag of SOURCES.devto) {
