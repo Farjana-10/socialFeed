@@ -9,7 +9,7 @@ const getPosts = async (req, res) => {
     const skip = (page - 1) * limit
     const kind = req.query.kind || 'all'
 
-    let query = { isPublic: true }
+    let query = {}
 
     if (req.userId) {
       const interests = await Interest.find({ userId: req.userId })
@@ -21,22 +21,18 @@ const getPosts = async (req, res) => {
           return [i]
         })
         query.tags = { $in: tagsToSearch }
+      } else {
+        query.isPublic = true
       }
+    } else {
+      query.isPublic = true
     }
 
     if (kind !== 'all' && ['video', 'post', 'news'].includes(kind)) {
       query.category = kind
     }
 
-    let total = await Post.countDocuments(query)
-
-    // FALLBACK LOGIC: Jodi interest er post na thake, shob public post dekhao
-    if (total === 0 && query.tags) {
-      delete query.tags
-      query.isPublic = true
-      total = await Post.countDocuments(query)
-    }
-
+    const total = await Post.countDocuments(query)
     const posts = await Post.find(query)
       .sort({ createdAt: -1 })
       .skip(skip)

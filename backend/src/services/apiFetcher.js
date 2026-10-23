@@ -20,10 +20,6 @@ const decodeHtml = (str) => {
     .replace(/&hellip;/g, '…')
     .replace(/&mdash;/g, '—')
     .replace(/&ndash;/g, '–')
-    .replace(/&rsquo;/g, "'")
-    .replace(/&lsquo;/g, "'")
-    .replace(/&rdquo;/g, '"')
-    .replace(/&ldquo;/g, '"')
 }
 
 const mapSubredditToTags = (subreddit) => {
@@ -33,9 +29,12 @@ const mapSubredditToTags = (subreddit) => {
     artificial: ['Technology', 'Science'],
     webdev: ['Technology'],
     science: ['Science'],
-    worldnews: ['World News'],
     gaming: ['Gaming'],
-    music: ['Music']
+    movies: ['Movies'],
+    sports: ['Sports'],
+    food: ['Food'],
+    travel: ['Travel'],
+    worldnews: ['News', 'World News']
   }
   return map[subreddit] || ['Technology']
 }

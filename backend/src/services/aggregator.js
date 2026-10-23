@@ -4,7 +4,7 @@ const rss = require('./rssFetcher')
 
 const SOURCES = {
   youtube: ['UCsBjURrPoezykLs9EqgamOA', 'UC8butISFwT-Wl7EV0hUK0BQ'],
-  reddit: ['technology', 'programming', 'artificial', 'webdev'],
+  reddit: ['technology', 'science', 'gaming', 'movies', 'sports', 'food', 'travel'], 
   devto: ['javascript', 'react', 'node'],
   hackernews: true,
   rss: ['bbc', 'techcrunch', 'theverge', 'medium']

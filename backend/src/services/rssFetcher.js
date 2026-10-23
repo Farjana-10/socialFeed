@@ -7,21 +7,21 @@ const FEEDS = {
     platformId: 'news',
     authorName: 'BBC News',
     category: 'news',
-    tags: ['World News']
+    tags: ['News', 'World News']
   },
   techcrunch: {
     url: 'https://techcrunch.com/feed/',
     platformId: 'news',
     authorName: 'TechCrunch',
     category: 'news',
-    tags: ['Technology']
+    tags: ['Technology', 'Science']
   },
   theverge: {
     url: 'https://www.theverge.com/rss/index.xml',
     platformId: 'news',
     authorName: 'The Verge',
     category: 'news',
-    tags: ['Technology']
+    tags: ['Technology', 'Science']
   },
   medium: {
     url: 'https://medium.com/feed/@medium',
