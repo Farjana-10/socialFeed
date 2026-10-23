@@ -24,7 +24,6 @@ export default function Feed() {
 
   const filtered = posts.filter((p) => {
     if (source !== 'All' && p.platformId !== source) return false
-    if (topic !== 'All topics' && !(p.tags || []).includes(topic)) return false
     return true
   })
 

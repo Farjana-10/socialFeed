@@ -6,11 +6,6 @@ const AVAILABLE = [
   { name: 'News', desc: 'Current events and world news' },
   { name: 'Gaming', desc: 'Video games and esports' },
   { name: 'Movies', desc: 'Film and cinema' },
-  { name: 'Music', desc: 'Artists, albums and concerts' },
-  { name: 'Books', desc: 'Literature and reading' },
-  { name: 'Health', desc: 'Wellness and fitness' },
-  { name: 'Finance', desc: 'Money and investing' },
-  { name: 'Sports', desc: 'Games and matches' },
 ]
 
 export default function InterestSelector({ selected, onChange }) {

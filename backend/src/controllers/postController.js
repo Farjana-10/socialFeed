@@ -15,18 +15,20 @@ const getPosts = async (req, res) => {
       const accounts = await SocialAccount.find({ userId: req.userId })
       const connectedPlatforms = accounts.map(a => a.platformId)
 
-      if (connectedPlatforms.length > 0) {
-        query.platformId = { $in: connectedPlatforms }
-      } else {
-        query.isPublic = true
-      }
-
       const interests = await Interest.find({ userId: req.userId })
       const selectedInterests = interests.map(i => i.name)
       
       if (selectedInterests.length > 0) {
-        // Tags er sathe match korar jonno regex use kora hoyeche
-        query.tags = { $in: selectedInterests }
+        const tagsToSearch = selectedInterests.flatMap(i => {
+          if (i === 'News') return ['News', 'World News']
+          return [i]
+        })
+        query.tags = { $in: tagsToSearch }
+      } else {
+        query.isPublic = true
+        if (connectedPlatforms.length > 0) {
+          query.platformId = { $in: connectedPlatforms }
+        }
       }
     } else {
       query.isPublic = true
