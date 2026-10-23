@@ -13,7 +13,7 @@ export default function Header() {
   const navigate = useNavigate()
   const location = useLocation()
   const [user, setUser] = useState(null)
-  const [timeLeft, setTimeLeft] = useState('27:33')
+  const [timeLeft, setTimeLeft] = useState('30:00')
 
   useEffect(() => {
     const userData = localStorage.getItem('user')
@@ -25,14 +25,29 @@ export default function Header() {
   }, [location.pathname])
 
   useEffect(() => {
-    let seconds = 27 * 60 + 33
+    let totalMinutes = 30
+    const savedPrefs = localStorage.getItem('preferences')
+    
+    if (savedPrefs) {
+      try {
+        const p = JSON.parse(savedPrefs)
+        if (p.dailyLimit) totalMinutes = p.dailyLimit
+      } catch {}
+    }
+
+    let seconds = totalMinutes * 60
+    
     const interval = setInterval(() => {
-      if (seconds <= 0) return
+      if (seconds <= 0) {
+        clearInterval(interval)
+        return
+      }
       seconds -= 1
       const m = String(Math.floor(seconds / 60)).padStart(2, '0')
       const s = String(seconds % 60).padStart(2, '0')
       setTimeLeft(`${m}:${s}`)
     }, 1000)
+
     return () => clearInterval(interval)
   }, [])
 

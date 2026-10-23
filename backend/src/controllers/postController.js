@@ -1,5 +1,6 @@
 const Post = require('../models/Post')
 const SocialAccount = require('../models/SocialAccount')
+const Interest = require('../models/Interest')
 
 const getPosts = async (req, res) => {
   try {
@@ -18,6 +19,14 @@ const getPosts = async (req, res) => {
         query.platformId = { $in: connectedPlatforms }
       } else {
         query.isPublic = true
+      }
+
+      const interests = await Interest.find({ userId: req.userId })
+      const selectedInterests = interests.map(i => i.name)
+      
+      if (selectedInterests.length > 0) {
+        // Tags er sathe match korar jonno regex use kora hoyeche
+        query.tags = { $in: selectedInterests }
       }
     } else {
       query.isPublic = true

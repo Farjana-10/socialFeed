@@ -34,25 +34,16 @@ export default function Feed() {
 
       <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-serif text-4xl font-bold text-gray-900">
-            Your feed
-          </h1>
+          <h1 className="font-serif text-4xl font-bold text-gray-900">Your feed</h1>
           <p className="mt-1.5 text-sm text-gray-500">
             {user ? 'Personalized for your interests' : 'Ranked from popular topics'}
           </p>
         </div>
         <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="md"
-            onClick={() => { setPage(1); setKind('all') }}
-          >
-            <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
-            Refresh
+          <Button variant="outline" size="md" onClick={() => { setPage(1); setKind('all') }}>
+            <RefreshCw className="mr-1.5 h-3.5 w-3.5" /> Refresh
           </Button>
-          <Link to="/">
-            <Button size="md">Edit interests</Button>
-          </Link>
+          <Link to="/"><Button size="md">Edit interests</Button></Link>
         </div>
       </div>
 
@@ -89,21 +80,13 @@ export default function Feed() {
 
       {loading && <LoadingState />}
       {!loading && filtered.length === 0 && (
-        <EmptyState
-          title="Nothing matched those filters"
-          body="Try different filters or refresh"
-        />
+        <EmptyState title="Nothing matched those filters" body="Try changing your interests in the Home page." />
       )}
 
       <div className="space-y-4">
         {!loading &&
           filtered.map((post) => (
-            <FeedCard
-              key={post._id}
-              post={post}
-              user={user}
-              onLoginRequired={() => navigate('/login')}
-            />
+            <FeedCard key={post._id} post={post} user={user} onLoginRequired={() => navigate('/login')} />
           ))}
       </div>
 

@@ -37,11 +37,13 @@ export default function Home() {
       ? Math.min(600, Math.max(5, Number(custom)))
       : dailyLimit
 
+    // Save preferences (for timer)
     localStorage.setItem(
       'preferences',
       JSON.stringify({ dailyLimit: finalLimit, interests })
     )
 
+    // Save interests to backend
     const token = localStorage.getItem('token')
     if (token && interests.length > 0) {
       try {
