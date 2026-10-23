@@ -9,12 +9,9 @@ const getPosts = async (req, res) => {
     const skip = (page - 1) * limit
     const kind = req.query.kind || 'all'
 
-    let query = {}
+    let query = { isPublic: true }
 
     if (req.userId) {
-      const accounts = await SocialAccount.find({ userId: req.userId })
-      const connectedPlatforms = accounts.map(a => a.platformId)
-
       const interests = await Interest.find({ userId: req.userId })
       const selectedInterests = interests.map(i => i.name)
       
@@ -24,21 +21,22 @@ const getPosts = async (req, res) => {
           return [i]
         })
         query.tags = { $in: tagsToSearch }
-      } else {
-        query.isPublic = true
-        if (connectedPlatforms.length > 0) {
-          query.platformId = { $in: connectedPlatforms }
-        }
       }
-    } else {
-      query.isPublic = true
     }
 
     if (kind !== 'all' && ['video', 'post', 'news'].includes(kind)) {
       query.category = kind
     }
 
-    const total = await Post.countDocuments(query)
+    let total = await Post.countDocuments(query)
+
+    // FALLBACK LOGIC: Jodi interest er post na thake, shob public post dekhao
+    if (total === 0 && query.tags) {
+      delete query.tags
+      query.isPublic = true
+      total = await Post.countDocuments(query)
+    }
+
     const posts = await Post.find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -71,22 +69,12 @@ const getPosts = async (req, res) => {
 const getPostById = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
-
     if (!post) {
-      return res.status(404).json({
-        success: false,
-        message: 'Post not found'
-      })
+      return res.status(404).json({ success: false, message: 'Post not found' })
     }
-
     res.json({ success: true, post })
-
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Server error',
-      error: error.message
-    })
+    res.status(500).json({ success: false, message: 'Server error', error: error.message })
   }
 }
 
